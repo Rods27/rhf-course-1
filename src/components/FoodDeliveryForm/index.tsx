@@ -13,9 +13,8 @@ export const FoodDeliveryForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-    clearErrors,
-    control,
   } = useForm<IFormType>({
+    criteriaMode: "firstError",
     defaultValues: {
       orderNumber: new Date().valueOf(),
     },
@@ -31,18 +30,14 @@ export const FoodDeliveryForm = () => {
         <div className="col">
           <div className="form-floating">
             <input
-              {...register("orderNumber", {
-                required: "OrderNumber is required",
-              })}
+              {...register("orderNumber")}
               type="number"
               className="form-control"
               placeholder="Order Number"
-              onChange={() => clearErrors("orderNumber")}
               id="orderNumber"
               disabled
             />
             <label htmlFor="orderNumber">Order Number</label>
-            {errors.orderNumber && <p>{errors.orderNumber.message}</p>}
           </div>
         </div>
         <div className="col">
@@ -50,14 +45,23 @@ export const FoodDeliveryForm = () => {
             <input
               {...register("phone", {
                 required: "Phone is required",
+                minLength: {
+                  value: 10,
+                  message: "Must be at least 10 digits",
+                },
+                pattern: {
+                  value: /\d+/,
+                  message: "Only numbers allowed",
+                },
+                maxLength: 11,
               })}
-              type="text"
+              maxLength={11}
+              type="tel"
               className="form-control"
-              onChange={() => clearErrors("phone")}
               id="phone"
             />
             <label htmlFor="phone">Phone number</label>
-            {errors.phone && <p>{errors.phone.message}</p>}
+            {errors.phone && <p className="error">{errors.phone.message}</p>}
           </div>
         </div>
       </div>
@@ -66,16 +70,24 @@ export const FoodDeliveryForm = () => {
           <div className="form-floating mb-3">
             <input
               {...register("customerName", {
-                required: "Customer name is required",
+                required: {
+                  value: true,
+                  message: "This field is required",
+                },
+                maxLength: {
+                  value: 30,
+                  message: "Maximum 30 characters",
+                },
               })}
               type="text"
               className="form-control"
               placeholder="Customer Name"
-              onChange={() => clearErrors("customerName")}
               id="customerName"
             />
             <label htmlFor="customerName">Customer name</label>
-            {errors.customerName && <p>{errors.customerName.message}</p>}
+            {errors.customerName && (
+              <p className="error">{errors.customerName.message}</p>
+            )}
           </div>
         </div>
         <div className="col">
@@ -83,15 +95,19 @@ export const FoodDeliveryForm = () => {
             <input
               {...register("email", {
                 required: "Email is required",
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: "Incorret email format",
+                },
+                validate: {},
               })}
               type="text"
               className="form-control"
               placeholder="Email"
-              onChange={() => clearErrors("email")}
               id="email"
             />
             <label htmlFor="email">Email</label>
-            {errors.email && <p>{errors.email.message}</p>}
+            {errors.email && <p className="error">{errors.email.message}</p>}
           </div>
         </div>
       </div>
