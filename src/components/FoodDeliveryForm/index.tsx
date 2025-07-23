@@ -99,7 +99,6 @@ export const FoodDeliveryForm = () => {
                   value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                   message: "Incorret email format",
                 },
-                validate: {},
               })}
               type="text"
               className="form-control"
