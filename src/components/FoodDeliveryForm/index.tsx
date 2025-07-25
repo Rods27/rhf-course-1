@@ -1,5 +1,21 @@
-import React, { ChangeEvent, SyntheticEvent, useState } from "react";
 import { useForm } from "react-hook-form";
+import Select from "src/controls/Select";
+import TextField from "src/controls/TextField";
+import { SelectOptionType } from "src/types";
+
+const paymentOptions: SelectOptionType[] = [
+  { value: "", text: "Select" },
+  { value: "online", text: "Paid online" },
+  { value: "cod", text: "Cash on delivery" },
+];
+
+const deliveryOptions: SelectOptionType[] = [
+  { value: 0, text: "Select" },
+  { value: 30, text: "Half an Hour" },
+  { value: 60, text: "1 Hour" },
+  { value: 120, text: "2 Hour" },
+  { value: 180, text: "3 Hour" },
+];
 
 export const FoodDeliveryForm = () => {
   interface IFormType {
@@ -7,6 +23,12 @@ export const FoodDeliveryForm = () => {
     phone: string;
     orderNumber: number;
     email: string;
+    paymentMethod: string;
+    deliveryWithin: string;
+    streetAddres: string;
+    landmark: string;
+    city: string;
+    state: string;
   }
 
   const {
@@ -17,6 +39,14 @@ export const FoodDeliveryForm = () => {
     criteriaMode: "firstError",
     defaultValues: {
       orderNumber: new Date().valueOf(),
+      phone: "",
+      email: "",
+      paymentMethod: "",
+      deliveryWithin: "",
+      streetAddres: "",
+      landmark: "",
+      city: "",
+      state: "",
     },
   });
 
@@ -29,70 +59,63 @@ export const FoodDeliveryForm = () => {
       <div className="row mb-3">
         <div className="col">
           <div className="form-floating">
-            <input
+            <TextField
               {...register("orderNumber")}
-              type="number"
               className="form-control"
               placeholder="Order Number"
               id="orderNumber"
+              label="Order Number"
               disabled
             />
-            <label htmlFor="orderNumber">Order Number</label>
           </div>
         </div>
         <div className="col">
-          <div className="form-floating">
-            <input
-              {...register("phone", {
-                required: "Phone is required",
-                minLength: {
-                  value: 10,
-                  message: "Must be at least 10 digits",
-                },
-                pattern: {
-                  value: /\d+/,
-                  message: "Only numbers allowed",
-                },
-                maxLength: 11,
-              })}
-              maxLength={11}
-              type="tel"
-              className="form-control"
-              id="phone"
-            />
-            <label htmlFor="phone">Phone number</label>
-            {errors.phone && <p className="error">{errors.phone.message}</p>}
-          </div>
+          <TextField
+            {...register("phone", {
+              required: "Phone is required",
+              minLength: {
+                value: 10,
+                message: "Must be at least 10 digits",
+              },
+              pattern: {
+                value: /\d+/,
+                message: "Only numbers allowed",
+              },
+              maxLength: 11,
+            })}
+            maxLength={11}
+            type="tel"
+            className="form-control"
+            id="phone"
+            error={errors.phone}
+            label="Phone number"
+          />
         </div>
       </div>
       <div className="row">
         <div className="col">
-          <div className="form-floating mb-3">
-            <input
-              {...register("customerName", {
-                required: {
-                  value: true,
-                  message: "This field is required",
-                },
-                maxLength: {
-                  value: 30,
-                  message: "Maximum 30 characters",
-                },
-              })}
-              type="text"
-              className="form-control"
-              placeholder="Customer Name"
-              id="customerName"
-            />
-            <label htmlFor="customerName">Customer name</label>
-            {errors.customerName && (
-              <p className="error">{errors.customerName.message}</p>
-            )}
-          </div>
+          <TextField
+            type="text"
+            className="form-control"
+            placeholder="Customer Name"
+            id="customerName"
+            label="Customer Name"
+            {...register("customerName", {
+              required: {
+                value: true,
+                message: "This field is required",
+              },
+              maxLength: {
+                value: 30,
+                message: "Maximum 30 characters",
+              },
+            })}
+            error={errors.customerName}
+          />
         </div>
         <div className="col">
           <div className="form-floating mb-3">
-            <input
+            <TextField
               {...register("email", {
                 required: "Email is required",
                 pattern: {
@@ -100,17 +123,43 @@ export const FoodDeliveryForm = () => {
                   message: "Incorret email format",
                 },
               })}
-              type="text"
+              type="email"
               className="form-control"
               placeholder="Email"
               id="email"
+              error={errors.email}
+              label="Email"
             />
-            <label htmlFor="email">Email</label>
-            {errors.email && <p className="error">{errors.email.message}</p>}
           </div>
         </div>
       </div>
-
+      list of food items
+      <div className="row mb-2">
+        <div className="col">
+          <div className="form-floating">
+            <Select
+              {...register("paymentMethod", {
+                required: "Select an option.",
+              })}
+              id="paymentMethod"
+              label="Payment method"
+              options={paymentOptions}
+              error={errors.paymentMethod}
+            />
+          </div>
+        </div>
+        <div className="col">
+          <Select
+            {...register("deliveryWithin", {
+              required: "Select an option.",
+            })}
+            id="deliveryWithin"
+            label="Delivery within"
+            options={deliveryOptions}
+            error={errors.paymentMethod}
+          />
+        </div>
+      </div>
       <button type="submit" className="btn btn-primary">
         Submit
       </button>
