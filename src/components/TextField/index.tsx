@@ -16,6 +16,7 @@ const TextField = forwardRef(
         <input
           className={`form-control ${props?.className ?? ""}`}
           ref={ref}
+          type={props?.type ?? "text"}
           {...props}
         />
         <label htmlFor={props.label}>{props.label}</label>

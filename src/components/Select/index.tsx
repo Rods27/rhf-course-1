@@ -1,11 +1,11 @@
 import { forwardRef, SelectHTMLAttributes, ForwardedRef } from "react";
 import { FieldError } from "react-hook-form";
-import type { SelectOptionType } from "src/types";
+import type { TSelectOptionType } from "src/types";
 
 interface ISelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   label: string;
   error?: FieldError;
-  options: SelectOptionType[];
+  options: TSelectOptionType[];
 }
 
 const Select = forwardRef(
